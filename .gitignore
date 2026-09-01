@@ -1,0 +1,110 @@
+# ---------------------------------------------------------------
+# .gitignore - CSE 340 Backend Development
+# Base: plantilla oficial "Node" de GitHub + reglas propias del curso
+# ---------------------------------------------------------------
+
+# --- Reglas propias del curso -----------------------------------
+# Ignorar TODA la documentacion en Markdown (guias, apuntes, notas
+# personales) para que nunca se suba al repositorio publico...
+*.md
+# ...excepto el README, que si debe verse en GitHub.
+!README.md
+
+# --- Logs -------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# --- Runtime data -----------------------------------------------
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# --- Coverage y tests -------------------------------------------
+lib-cov
+coverage
+*.lcov
+.nyc_output
+
+# --- Herramientas de build --------------------------------------
+.grunt
+bower_components
+build/Release
+jspm_packages/
+web_modules/
+*.tsbuildinfo
+
+# --- Dependencias -----------------------------------------------
+node_modules/
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# --- Cache de linters y bundlers --------------------------------
+.eslintcache
+.stylelintcache
+.cache
+.parcel-cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# --- Salidas de frameworks --------------------------------------
+.next
+out
+.nuxt
+dist
+.vuepress/dist
+.temp
+.docusaurus
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vscode-test
+
+# --- Variables de entorno (NUNCA subir credenciales) ------------
+.env
+.env.*
+!.env.example
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# --- Base de datos ----------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+# --- Editores / IDE ---------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# --- Sistema operativo ------------------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Herramientas de IA / notas locales -------------------------
+.claude/
+CLAUDE.md
