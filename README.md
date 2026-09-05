@@ -22,9 +22,12 @@ final project built with **Node.js**, **Express**, and **PostgreSQL**.
 ## Versions installed on this machine
 
 - Git: 2.43.0
-- Node.js: v24.10.0
+- Node.js: v20.10.0 (active via nvm; v24.10.0 is also installed system-wide)
 - NPM: 11.6.1
 - pgAdmin 4: 9.17
+
+**Minimum Node.js version: 20.6.0**, because `npm run dev` loads `.env` with Node's built-in
+`--env-file` flag instead of the `dotenv` package.
 
 ## Current structure (W01)
 
@@ -34,15 +37,16 @@ cse340-course-repo/
 │   ├── css/
 │   │   └── main.css          # Site stylesheet
 │   └── images/               # Static images served at /images/...
-├── views/
-│   ├── partials/
-│   │   ├── header.ejs        # Shared head, branding, and navigation
-│   │   └── footer.ejs        # Shared footer
-│   ├── home.ejs
-│   ├── organizations.ejs
-│   ├── projects.ejs
-│   ├── categories.ejs
-│   └── 404.ejs
+├── src/
+│   └── views/
+│       ├── partials/
+│       │   ├── header.ejs    # Shared head, branding, and navigation
+│       │   └── footer.ejs    # Shared footer
+│       ├── home.ejs
+│       ├── organizations.ejs
+│       ├── projects.ejs
+│       ├── categories.ejs
+│       └── 404.ejs
 ├── .env                      # Environment variables (NEVER committed)
 ├── .env.example              # Template for the .env file
 ├── .gitignore
@@ -81,11 +85,11 @@ defined in `.env`.
 
 | Route | View | Page title |
 |---|---|---|
-| `/` | `views/home.ejs` | Home |
-| `/organizations` | `views/organizations.ejs` | Organizations |
-| `/projects` | `views/projects.ejs` | Service Projects |
-| `/categories` | `views/categories.ejs` | Categories |
-| any other route | `views/404.ejs` | Page Not Found (HTTP 404) |
+| `/` | `src/views/home.ejs` | Home |
+| `/organizations` | `src/views/organizations.ejs` | Organizations |
+| `/projects` | `src/views/projects.ejs` | Service Projects |
+| `/categories` | `src/views/categories.ejs` | Categories |
+| any other route | `src/views/404.ejs` | Page Not Found (HTTP 404) |
 
 ## Notes
 
