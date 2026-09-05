@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1>Service categories</h1>
+  <p class="lead">
+    Categories group the service projects by the kind of work they involve. They are
+    placeholders for now and will be connected to real project data in a later week.
+  </p>
+</section>
+
+<section class="section">
+  <div class="card-grid">
+    <% categories.forEach((category) => { %>
+      <article class="card">
+        <h2><%= category.name %></h2>
+        <p><%= category.description %></p>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

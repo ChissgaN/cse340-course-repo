@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1>Partner organizations</h1>
+  <p class="lead">
+    These are the organizations that coordinate service projects through the CSE 340
+    Service Network. Each one focuses on a different community need.
+  </p>
+</section>
+
+<section class="section">
+  <div class="card-grid">
+    <% organizations.forEach((organization) => { %>
+      <article class="card org-card">
+        <img class="org-logo" src="<%= organization.logo %>"
+             alt="Logo of <%= organization.name %>">
+        <h2><%= organization.name %></h2>
+        <p class="tag"><%= organization.focus %></p>
+        <p><%= organization.description %></p>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

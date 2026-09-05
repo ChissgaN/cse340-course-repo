@@ -26,21 +26,33 @@ final project built with **Node.js**, **Express**, and **PostgreSQL**.
 - NPM: 11.6.1
 - pgAdmin 4: 9.17
 
-## Planned structure
+## Current structure (W01)
 
 ```
 cse340-course-repo/
-├── controllers/     # Logic that responds to each route
-├── database/        # PostgreSQL connection and queries
-├── models/          # Data access layer
-├── public/          # CSS, images, and client-side JS
-├── routes/          # Express route definitions
-├── views/           # EJS templates
-├── .env             # Environment variables (NEVER committed)
+├── public/
+│   ├── css/
+│   │   └── main.css          # Site stylesheet
+│   └── images/               # Static images served at /images/...
+├── views/
+│   ├── partials/
+│   │   ├── header.ejs        # Shared head, branding, and navigation
+│   │   └── footer.ejs        # Shared footer
+│   ├── home.ejs
+│   ├── organizations.ejs
+│   ├── projects.ejs
+│   ├── categories.ejs
+│   └── 404.ejs
+├── .env                      # Environment variables (NEVER committed)
+├── .env.example              # Template for the .env file
 ├── .gitignore
+├── nodemon.json              # Development auto-restart configuration
 ├── package.json
-└── server.js        # Application entry point
+└── server.js                 # Application entry point
 ```
+
+Later weeks will add `controllers/`, `models/`, `routes/`, and `database/` as the course
+introduces the MVC pattern and PostgreSQL. Those folders are intentionally not created yet.
 
 ## Running the project locally
 
@@ -52,15 +64,28 @@ cd cse340-course-repo
 # 2. Install dependencies
 npm install
 
-# 3. Create a .env file with your local credentials
-#    (see .env.example once it exists)
+# 3. Create your local .env file from the template
+cp .env.example .env
 
-# 4. Start the development server
+# 4. Start the development server (Nodemon)
 npm run dev
+
+# ...or run it the way production does
+npm start
 ```
 
-The application will be available at `http://localhost:5500`, or whichever port is
+The application will be available at `http://localhost:3000`, or whichever port is
 defined in `.env`.
+
+## Pages and routes
+
+| Route | View | Page title |
+|---|---|---|
+| `/` | `views/home.ejs` | Home |
+| `/organizations` | `views/organizations.ejs` | Organizations |
+| `/projects` | `views/projects.ejs` | Service Projects |
+| `/categories` | `views/categories.ejs` | Categories |
+| any other route | `views/404.ejs` | Page Not Found (HTTP 404) |
 
 ## Notes
 

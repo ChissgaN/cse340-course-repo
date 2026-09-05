@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="UnityServe Volunteers placeholder logo">
+  <circle cx="48" cy="48" r="46" fill="#6ea8d8"/>
+  <circle cx="48" cy="48" r="46" fill="none" stroke="#123a5c" stroke-width="4"/>
+  <circle cx="34" cy="38" r="9" fill="#123a5c"/>
+  <circle cx="62" cy="38" r="9" fill="#0d2a44"/>
+  <path d="M20 68c0-9 6-15 14-15s14 6 14 15z" fill="#123a5c"/>
+  <path d="M48 68c0-9 6-15 14-15s14 6 14 15z" fill="#0d2a44"/>
+  <text x="48" y="90" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="700" fill="#123a5c">USV</text>
+</svg>

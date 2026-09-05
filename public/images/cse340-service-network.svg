@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Illustration of three volunteers working together on a community service project">
+  <rect width="600" height="400" rx="16" fill="#e8f0ee"/>
+  <circle cx="300" cy="150" r="110" fill="#d3e5e1"/>
+
+  <!-- ground -->
+  <rect x="0" y="300" width="600" height="100" fill="#c9ddd8"/>
+
+  <!-- connecting network lines -->
+  <path d="M150 250 L300 190 L450 250" fill="none" stroke="#10786f" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="300" cy="190" r="12" fill="#123a5c"/>
+
+  <!-- volunteer left -->
+  <circle cx="150" cy="228" r="26" fill="#123a5c"/>
+  <path d="M108 320c0-24 19-42 42-42s42 18 42 42z" fill="#123a5c"/>
+
+  <!-- volunteer center -->
+  <circle cx="300" cy="248" r="30" fill="#10786f"/>
+  <path d="M252 330c0-27 21-48 48-48s48 21 48 48z" fill="#10786f"/>
+
+  <!-- volunteer right -->
+  <circle cx="450" cy="228" r="26" fill="#0d2a44"/>
+  <path d="M408 320c0-24 19-42 42-42s42 18 42 42z" fill="#0d2a44"/>
+
+  <!-- tree -->
+  <rect x="533" y="250" width="10" height="50" fill="#7a5b3a"/>
+  <circle cx="538" cy="236" r="34" fill="#8ac47a"/>
+
+  <text x="300" y="378" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#123a5c">CSE 340 Service Network</text>
+</svg>

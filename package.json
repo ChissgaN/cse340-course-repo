@@ -1,0 +1,25 @@
+{
+  "name": "cse340-course-repo",
+  "version": "1.0.0",
+  "description": "CSE 340 Service Network - W01 initial site creation",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "cse340",
+    "express",
+    "ejs"
+  ],
+  "author": "Jairo Noodli Castro Castillo",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
