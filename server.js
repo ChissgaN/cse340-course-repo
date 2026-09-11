@@ -5,6 +5,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { testConnection } from './src/models/db.js';
+import { getAllOrganizations } from './src/models/organizations.js';
 
 /* ******************************************
  * ESM does not provide __filename / __dirname,
@@ -37,29 +39,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* ******************************************
  * Page data
  * ****************************************** */
-const organizations = [
-  {
-    name: 'BrightFuture Builders',
-    logo: '/images/brightfuture-logo.svg',
-    focus: 'Housing and community construction',
-    description:
-      'BrightFuture Builders repairs and builds safe homes for families in need. Volunteers help with painting, basic carpentry, and neighborhood clean-up days.'
-  },
-  {
-    name: 'GreenHarvest Growers',
-    logo: '/images/greenharvest-logo.svg',
-    focus: 'Sustainable food and community gardens',
-    description:
-      'GreenHarvest Growers runs community gardens and urban farms. Volunteers plant, harvest, and deliver fresh produce to local food banks.'
-  },
-  {
-    name: 'UnityServe Volunteers',
-    logo: '/images/unityserve-logo.svg',
-    focus: 'General community service',
-    description:
-      'UnityServe Volunteers coordinates service events across the city, connecting people with the organizations that need help the most each week.'
-  }
-];
 
 const projects = [
   {
@@ -113,9 +92,12 @@ app.get('/', (req, res) => {
   res.render('home', { title: 'Home', activePage: 'home' });
 });
 
-app.get('/organizations', (req, res) => {
+app.get('/organizations', async (req, res) => {
+  const organizations = await getAllOrganizations();
+  const title = 'Our Partner Organizations';
+
   res.render('organizations', {
-    title: 'Organizations',
+    title,
     activePage: 'organizations',
     organizations
   });
@@ -147,6 +129,12 @@ app.use((req, res) => {
 /* ******************************************
  * Start the server
  * ****************************************** */
-app.listen(PORT, () => {
-  console.log(`CSE 340 Service Network running in ${NODE_ENV} mode on port ${PORT}`);
+app.listen(PORT, async () => {
+  try {
+    await testConnection();
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
 });

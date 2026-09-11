@@ -12,11 +12,13 @@
   <div class="card-grid">
     <% organizations.forEach((organization) => { %>
       <article class="card org-card">
-        <img class="org-logo" src="<%= organization.logo %>"
+        <img class="org-logo" src="/images/<%= organization.logo_filename %>"
              alt="Logo of <%= organization.name %>">
         <h2><%= organization.name %></h2>
-        <p class="tag"><%= organization.focus %></p>
         <p><%= organization.description %></p>
+        <p class="meta">
+          <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a>
+        </p>
       </article>
     <% }) %>
   </div>
