@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 
 /* ******************************************
  * ESM does not provide __filename / __dirname,
@@ -40,29 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Page data
  * ****************************************** */
 
-const projects = [
-  {
-    name: 'Park Cleanup',
-    organization: 'GreenHarvest Growers',
-    category: 'Environmental',
-    description:
-      'Volunteers gather on Saturday mornings to remove litter, clear trails, and restore planting beds in neighborhood parks.'
-  },
-  {
-    name: 'Food Drive',
-    organization: 'UnityServe Volunteers',
-    category: 'Community Service',
-    description:
-      'A monthly collection of non-perishable food. Volunteers sort, pack, and deliver donations to families served by local food banks.'
-  },
-  {
-    name: 'Community Tutoring',
-    organization: 'BrightFuture Builders',
-    category: 'Educational',
-    description:
-      'After-school tutoring in reading and mathematics for elementary and middle school students who need extra support.'
-  }
-];
 
 const categories = [
   {
@@ -103,9 +81,12 @@ app.get('/organizations', async (req, res) => {
   });
 });
 
-app.get('/projects', (req, res) => {
+app.get('/projects', async (req, res) => {
+  const projects = await getAllProjects();
+  const title = 'Service Projects';
+
   res.render('projects', {
-    title: 'Service Projects',
+    title,
     activePage: 'projects',
     projects
   });
