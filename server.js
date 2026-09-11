@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
+import { getAllCategories } from './src/models/categories.js';
 
 /* ******************************************
  * ESM does not provide __filename / __dirname,
@@ -37,29 +38,6 @@ app.set('views', path.join(__dirname, 'src', 'views'));
  * ****************************************** */
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ******************************************
- * Page data
- * ****************************************** */
-
-
-const categories = [
-  {
-    name: 'Environmental',
-    description: 'Projects that protect and restore parks, gardens, rivers, and green spaces.'
-  },
-  {
-    name: 'Educational',
-    description: 'Tutoring, literacy, and mentoring opportunities for students of every age.'
-  },
-  {
-    name: 'Community Service',
-    description: 'Food drives, shelter support, and neighborhood help for families in need.'
-  },
-  {
-    name: 'Health and Wellness',
-    description: 'Health fairs, blood drives, and activities that promote physical and mental wellbeing.'
-  }
-];
 
 /* ******************************************
  * Routes
@@ -92,9 +70,12 @@ app.get('/projects', async (req, res) => {
   });
 });
 
-app.get('/categories', (req, res) => {
+app.get('/categories', async (req, res) => {
+  const categories = await getAllCategories();
+  const title = 'Categories';
+
   res.render('categories', {
-    title: 'Categories',
+    title,
     activePage: 'categories',
     categories
   });

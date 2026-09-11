@@ -3,8 +3,8 @@
 <section class="page-intro">
   <h1><%= title %></h1>
   <p class="lead">
-    Categories group the service projects by the kind of work they involve. They are
-    placeholders for now and will be connected to real project data in a later week.
+    Categories group the service projects by the kind of work they involve. A project can
+    belong to more than one category.
   </p>
 </section>
 
@@ -13,7 +13,6 @@
     <% categories.forEach((category) => { %>
       <article class="card">
         <h2><%= category.name %></h2>
-        <p><%= category.description %></p>
       </article>
     <% }) %>
   </div>

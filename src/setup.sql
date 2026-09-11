@@ -135,3 +135,86 @@ SELECT p.project_id, p.project_date, p.title, o.name AS organization_name
 FROM project p
 JOIN organization o ON o.organization_id = p.organization_id
 ORDER BY p.project_date;
+
+
+-- ========================================
+-- Category Table
+-- ========================================
+--
+-- Un proyecto puede pertenecer a varias categorias y una categoria
+-- puede tener varios proyectos: es una relacion muchos-a-muchos.
+-- En SQL eso no se puede guardar en una sola columna, asi que se
+-- necesita una tabla intermedia (project_category) mas abajo.
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name        VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+-- ========================================
+-- Insert sample data: Categories
+-- ========================================
+
+INSERT INTO category (name)
+VALUES
+('Environmental'),
+('Educational'),
+('Community Service'),
+('Health and Wellness');
+
+
+-- ========================================
+-- Project / Category junction table
+-- ========================================
+--
+-- Cada fila une UN proyecto con UNA categoria. Si un proyecto tiene
+-- dos categorias, aparece en dos filas.
+--
+-- La clave primaria compuesta (project_id, category_id) impide que
+-- se repita el mismo par, que es la forma de evitar duplicados.
+
+CREATE TABLE project_category (
+    project_id  INTEGER NOT NULL
+                REFERENCES project(project_id) ON DELETE CASCADE,
+    category_id INTEGER NOT NULL
+                REFERENCES category(category_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, category_id)
+);
+
+
+-- ========================================
+-- Insert sample data: Project categories
+-- ========================================
+-- Categorias: 1 Environmental | 2 Educational
+--             3 Community Service | 4 Health and Wellness
+-- Todos los proyectos tienen al menos una categoria.
+
+INSERT INTO project_category (project_id, category_id)
+VALUES
+(1, 3),            -- Wheelchair Ramp Build
+(2, 3),            -- Winter Weatherization Day
+(3, 3),            -- Community Center Repainting
+(4, 3), (4, 4),    -- Playground Repair Project
+(5, 3),            -- Porch and Railing Repairs
+(6, 1), (6, 3),    -- Fall Community Garden Harvest
+(7, 1), (7, 2),    -- Compost Building Workshop
+(8, 2), (8, 1),    -- School Garden Planting
+(9, 1),            -- Riverbank Tree Planting
+(10, 1),           -- Greenhouse Winter Setup
+(11, 3),           -- Neighborhood Food Drive
+(12, 1),           -- Park Cleanup Morning
+(13, 2),           -- After-School Tutoring Launch
+(14, 3),           -- Winter Coat Collection
+(15, 4), (15, 3);  -- Senior Center Holiday Visit
+
+
+-- ========================================
+-- Verify Categories
+-- ========================================
+
+SELECT c.category_id, c.name, COUNT(pc.project_id)::int AS total_projects
+FROM category c
+LEFT JOIN project_category pc ON pc.category_id = c.category_id
+GROUP BY c.category_id, c.name
+ORDER BY c.name;
