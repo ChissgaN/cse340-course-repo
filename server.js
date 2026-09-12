@@ -1,7 +1,4 @@
-/* ******************************************
- * CSE 340 Service Network
- * Application entry point (W01)
- * ****************************************** */
+// CSE 340 Service Network - application entry point.
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,40 +7,22 @@ import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
 import { getAllCategories } from './src/models/categories.js';
 
-/* ******************************************
- * ESM does not provide __filename / __dirname,
- * so we build them from the module URL.
- * ****************************************** */
+// ESM does not provide __filename or __dirname, so build them from the module URL.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ******************************************
- * Environment variables
- * ****************************************** */
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-/* ******************************************
- * View engine: EJS
- * ****************************************** */
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 
-/* ******************************************
- * Static files (CSS and images) are served
- * from /public, so the browser asks for
- * /css/main.css and /images/<file>.
- * ****************************************** */
+// public/ becomes the web root for static files, so the browser requests
+// /css/main.css and /images/<file>, never /public/...
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-/* ******************************************
- * Routes
- * Each route renders an EJS view and passes
- * the page title as an EJS variable.
- * ****************************************** */
 app.get('/', (req, res) => {
   res.render('home', { title: 'Home', activePage: 'home' });
 });
@@ -81,16 +60,12 @@ app.get('/categories', async (req, res) => {
   });
 });
 
-/* ******************************************
- * 404 - any route that did not match above
- * ****************************************** */
+// Must stay last: this handler has no path, so it catches every request
+// the routes above did not match.
 app.use((req, res) => {
   res.status(404).render('404', { title: 'Page Not Found', activePage: '' });
 });
 
-/* ******************************************
- * Start the server
- * ****************************************** */
 app.listen(PORT, async () => {
   try {
     await testConnection();

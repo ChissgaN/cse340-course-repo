@@ -12,8 +12,7 @@
   <div class="card-grid">
     <% projects.forEach((project) => { %>
       <%
-        // La base devuelve una fecha; la mostramos en un formato legible
-        // como "October 3, 2026" en lugar de "2026-10-03T06:00:00.000Z".
+        // The database returns a Date object, so format it as "October 3, 2026".
         const projectDate = project.project_date.toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',

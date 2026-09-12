@@ -52,9 +52,8 @@ SELECT * FROM organization;
 -- Service Project Table
 -- ========================================
 --
--- Cada proyecto pertenece a UNA organizacion que lo patrocina.
--- La relacion es uno-a-muchos: una organizacion tiene muchos
--- proyectos, un proyecto tiene una sola organizacion.
+-- One-to-many: an organization sponsors many projects, a project has
+-- exactly one sponsoring organization.
 
 CREATE TABLE project (
     project_id      SERIAL PRIMARY KEY,
@@ -71,7 +70,7 @@ CREATE TABLE project (
 -- ========================================
 -- Insert sample data: Service Projects
 -- ========================================
--- 5 proyectos por cada una de las 3 organizaciones = 15 en total.
+-- 5 projects for each of the 3 organizations = 15 total.
 
 INSERT INTO project (organization_id, title, description, location, project_date)
 VALUES
@@ -141,10 +140,9 @@ ORDER BY p.project_date;
 -- Category Table
 -- ========================================
 --
--- Un proyecto puede pertenecer a varias categorias y una categoria
--- puede tener varios proyectos: es una relacion muchos-a-muchos.
--- En SQL eso no se puede guardar en una sola columna, asi que se
--- necesita una tabla intermedia (project_category) mas abajo.
+-- Many-to-many: a project can belong to several categories and a
+-- category can hold several projects. That cannot live in a single
+-- column, so the project_category junction table below stores the links.
 
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
@@ -168,11 +166,9 @@ VALUES
 -- Project / Category junction table
 -- ========================================
 --
--- Cada fila une UN proyecto con UNA categoria. Si un proyecto tiene
--- dos categorias, aparece en dos filas.
---
--- La clave primaria compuesta (project_id, category_id) impide que
--- se repita el mismo par, que es la forma de evitar duplicados.
+-- Each row links one project to one category, so a project with two
+-- categories appears in two rows. The composite primary key stops the
+-- same pair from being stored twice.
 
 CREATE TABLE project_category (
     project_id  INTEGER NOT NULL
@@ -186,9 +182,9 @@ CREATE TABLE project_category (
 -- ========================================
 -- Insert sample data: Project categories
 -- ========================================
--- Categorias: 1 Environmental | 2 Educational
---             3 Community Service | 4 Health and Wellness
--- Todos los proyectos tienen al menos una categoria.
+-- Category ids: 1 Environmental | 2 Educational
+--               3 Community Service | 4 Health and Wellness
+-- Every project has at least one category.
 
 INSERT INTO project_category (project_id, category_id)
 VALUES
