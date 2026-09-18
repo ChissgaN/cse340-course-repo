@@ -3,9 +3,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 
 // ESM does not provide __filename or __dirname, so build them from the module URL.
 const __filename = fileURLToPath(import.meta.url);
@@ -37,49 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-  res.render('home', { title: 'Home', activePage: 'home' });
-});
-
-app.get('/organizations', async (req, res) => {
-  const organizations = await getAllOrganizations();
-  const title = 'Our Partner Organizations';
-
-  res.render('organizations', {
-    title,
-    activePage: 'organizations',
-    organizations
-  });
-});
-
-app.get('/projects', async (req, res) => {
-  const projects = await getAllProjects();
-  const title = 'Service Projects';
-
-  res.render('projects', {
-    title,
-    activePage: 'projects',
-    projects
-  });
-});
-
-app.get('/categories', async (req, res) => {
-  const categories = await getAllCategories();
-  const title = 'Categories';
-
-  res.render('categories', {
-    title,
-    activePage: 'categories',
-    categories
-  });
-});
-
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-});
+// Use the imported router to handle routes
+app.use(router);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
