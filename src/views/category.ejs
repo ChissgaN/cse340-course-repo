@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <h2><%= category.name %></h2>
+  <p class="lead">
+    Service projects in this category, soonest first.
+  </p>
+</section>
+
+<section class="section">
+  <% if (projects.length === 0) { %>
+    <p>No service projects are listed in this category yet.</p>
+  <% } else { %>
+    <div class="card-grid">
+      <% projects.forEach((project) => { %>
+        <%
+          const projectDate = project.project_date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        %>
+        <article class="card">
+          <h3>
+            <a href="/project/<%= project.project_id %>"><%= project.title %></a>
+          </h3>
+          <p><%= project.description %></p>
+          <p class="meta">
+            <%= projectDate %> &mdash; <%= project.location %><br>
+            Organized by
+            <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
+          </p>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<p><a href="/categories">Back to all categories</a></p>
+
+<%- include('partials/footer') %>

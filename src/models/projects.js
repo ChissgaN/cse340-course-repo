@@ -103,10 +103,40 @@ const getProjectDetails = async (projectId) => {
     return result.rows.length > 0 ? result.rows[0] : null;
 };
 
+/**
+ * Gets every service project in one category.
+ *
+ * Two joins: project_category holds the project/category links, and
+ * organization supplies the sponsor name for each project.
+ */
+const getProjectsByCategoryId = async (categoryId) => {
+    const query = `
+        SELECT
+          p.project_id,
+          p.title,
+          p.description,
+          p.location,
+          p.project_date,
+          o.organization_id,
+          o.name AS organization_name
+        FROM project p
+        JOIN project_category pc ON pc.project_id = p.project_id
+        JOIN organization o ON o.organization_id = p.organization_id
+        WHERE pc.category_id = $1
+        ORDER BY p.project_date;
+      `;
+
+    const queryParams = [categoryId];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
 // Export the model functions
 export {
     getAllProjects,
     getProjectsByOrganizationId,
     getUpcomingProjects,
-    getProjectDetails
+    getProjectDetails,
+    getProjectsByCategoryId
 }

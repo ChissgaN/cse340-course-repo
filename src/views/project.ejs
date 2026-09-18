@@ -15,6 +15,17 @@
 <section class="section">
   <article class="card">
     <h2><%= project.title %></h2>
+
+    <% if (categories.length > 0) { %>
+      <ul class="tag-list" aria-label="Categories">
+        <% categories.forEach((category) => { %>
+          <li>
+            <a class="tag" href="/category/<%= category.category_id %>"><%= category.name %></a>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+
     <p><%= project.description %></p>
 
     <dl class="project-facts">

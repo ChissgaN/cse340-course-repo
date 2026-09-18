@@ -244,6 +244,52 @@ main {
   margin-bottom: 0;
 }
 
+/* --- Category tags ------------------------------------------- */
+.tag-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+a.tag {
+  text-decoration: none;
+}
+
+a.tag:hover {
+  background-color: var(--teal-dark);
+  color: var(--white);
+}
+
+/* --- Definition list of project facts ------------------------ */
+.project-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+}
+
+.project-facts dt {
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.project-facts dd {
+  margin: 0;
+}
+
+/* --- List of an organization's projects ---------------------- */
+.project-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.project-list li {
+  margin-bottom: 0.5rem;
+}
+
 /* --- Buttons ------------------------------------------------- */
 .button {
   display: inline-block;
