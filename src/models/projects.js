@@ -48,5 +48,65 @@ const getProjectsByOrganizationId = async (organizationId) => {
     return result.rows;
 };
 
+/**
+ * Gets the next upcoming service projects, soonest first.
+ *
+ * CURRENT_DATE is evaluated by PostgreSQL, so "upcoming" is decided by the
+ * database clock rather than the server's. LIMIT takes a placeholder too, so
+ * the caller chooses how many without the number ever touching the SQL text.
+ */
+const getUpcomingProjects = async (numberOfProjects) => {
+    const query = `
+        SELECT
+          p.project_id,
+          p.title,
+          p.description,
+          p.location,
+          p.project_date,
+          o.organization_id,
+          o.name AS organization_name
+        FROM project p
+        JOIN organization o ON o.organization_id = p.organization_id
+        WHERE p.project_date >= CURRENT_DATE
+        ORDER BY p.project_date ASC
+        LIMIT $1;
+      `;
+
+    const queryParams = [numberOfProjects];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+/**
+ * Gets one service project by its id, with the name of its organization.
+ */
+const getProjectDetails = async (projectId) => {
+    const query = `
+        SELECT
+          p.project_id,
+          p.title,
+          p.description,
+          p.location,
+          p.project_date,
+          o.organization_id,
+          o.name AS organization_name
+        FROM project p
+        JOIN organization o ON o.organization_id = p.organization_id
+        WHERE p.project_id = $1;
+      `;
+
+    const queryParams = [projectId];
+    const result = await db.query(query, queryParams);
+
+    // Return the first row of the result set, or null if no rows are found
+    return result.rows.length > 0 ? result.rows[0] : null;
+};
+
 // Export the model functions
-export { getAllProjects, getProjectsByOrganizationId }
+export {
+    getAllProjects,
+    getProjectsByOrganizationId,
+    getUpcomingProjects,
+    getProjectDetails
+}
