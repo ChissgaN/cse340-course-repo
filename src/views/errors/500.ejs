@@ -1,0 +1,20 @@
+<%- include('../partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    We are experiencing technical difficulties. Our team has been notified and is working
+    to fix the issue.
+  </p>
+  <p>Return to the <a href="/">homepage</a> to continue browsing.</p>
+
+  <% if (NODE_ENV === 'development') { %>
+    <details open class="error-details">
+      <summary>Error Details (Development Only)</summary>
+      <pre><%= error %></pre>
+      <pre><%= stack %></pre>
+    </details>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>
