@@ -22,4 +22,31 @@ const getAllProjects = async() => {
     return result.rows;
 }
 
-export {getAllProjects}
+/**
+ * Gets the service projects sponsored by one organization.
+ *
+ * No JOIN here: the caller already knows which organization it asked for,
+ * so looking up the name again would be wasted work.
+ */
+const getProjectsByOrganizationId = async (organizationId) => {
+    const query = `
+        SELECT
+          project_id,
+          organization_id,
+          title,
+          description,
+          location,
+          project_date
+        FROM project
+        WHERE organization_id = $1
+        ORDER BY project_date;
+      `;
+
+    const queryParams = [organizationId];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+// Export the model functions
+export { getAllProjects, getProjectsByOrganizationId }
