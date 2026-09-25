@@ -1,6 +1,11 @@
 // Import any needed model functions
 import { body, validationResult } from 'express-validator';
-import { getUpcomingProjects, getProjectDetails, createProject } from '../models/projects.js';
+import {
+    getUpcomingProjects,
+    getProjectDetails,
+    createProject,
+    updateProject
+} from '../models/projects.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 
@@ -95,11 +100,65 @@ const processNewProjectForm = async (req, res) => {
     res.redirect('/projects');
 };
 
+const showEditProjectForm = async (req, res, next) => {
+    const projectId = Number(req.params.id);
+
+    if (!Number.isInteger(projectId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const project = await getProjectDetails(projectId);
+
+    if (project === null) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    // The dropdown needs every organization so the project can be reassigned.
+    const organizations = await getAllOrganizations();
+    const title = 'Edit Service Project';
+
+    res.render('edit-project', { title, activePage: 'projects', project, organizations });
+};
+
+const processEditProjectForm = async (req, res, next) => {
+    const projectId = Number(req.params.id);
+
+    if (!Number.isInteger(projectId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect(`/edit-project/${projectId}`);
+    }
+
+    const { title, description, location, date, organizationId } = req.body ?? {};
+
+    await updateProject(projectId, title, description, location, date, organizationId);
+
+    req.flash('success', 'Service project updated successfully!');
+
+    res.redirect(`/project/${projectId}`);
+};
+
 // Export any controller functions
 export {
     projectValidation,
     showProjectsPage,
     showProjectDetailsPage,
     showNewProjectForm,
-    processNewProjectForm
+    processNewProjectForm,
+    showEditProjectForm,
+    processEditProjectForm
 };

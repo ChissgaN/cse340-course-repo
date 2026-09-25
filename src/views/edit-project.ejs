@@ -1,0 +1,86 @@
+<%- include('partials/header') %>
+
+<%
+  // <input type="date"> only accepts YYYY-MM-DD. Building it from the local
+  // date parts rather than toISOString() matters: pg parses a DATE column as
+  // local midnight, and converting that to UTC can land on the previous day in
+  // any timezone ahead of UTC, showing the wrong date in the picker.
+  const d = project.project_date;
+  const dateValue = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+%>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Update the details for <%= project.title %>.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/edit-project/<%= project.project_id %>" method="POST">
+    <div class="form-group">
+      <label for="title">Project Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        minlength="3"
+        maxlength="200"
+        required
+        value="<%= project.title %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="5"
+        maxlength="1000"
+        required
+      ><%= project.description %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        id="location"
+        name="location"
+        maxlength="200"
+        required
+        value="<%= project.location %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input
+        type="date"
+        id="date"
+        name="date"
+        required
+        value="<%= dateValue %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="organizationId">Sponsoring Organization</label>
+      <select id="organizationId" name="organizationId" required>
+        <% organizations.forEach((organization) => { %>
+          <option
+            value="<%= organization.organization_id %>"
+            <%= organization.organization_id === project.organization_id ? 'selected' : '' %>
+          ><%= organization.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <button class="button" type="submit">Update Service Project</button>
+  </form>
+</section>
+
+<p><a href="/project/<%= project.project_id %>">Cancel and go back</a></p>
+
+<%- include('partials/footer') %>
