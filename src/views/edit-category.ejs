@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Rename <%= category.name %>. Projects already in this category keep their
+    assignment.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/edit-category/<%= category.category_id %>" method="POST">
+    <div class="form-group">
+      <label for="name">Category Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        maxlength="100"
+        required
+        value="<%= category.name %>"
+      />
+    </div>
+
+    <button class="button" type="submit">Update Category</button>
+  </form>
+</section>
+
+<p><a href="/category/<%= category.category_id %>">Cancel and go back</a></p>
+
+<%- include('partials/footer') %>

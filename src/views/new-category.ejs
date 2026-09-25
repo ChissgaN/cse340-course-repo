@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Categories group service projects by the kind of work they involve.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/new-category" method="POST">
+    <div class="form-group">
+      <label for="name">Category Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        maxlength="100"
+        required
+      />
+    </div>
+
+    <button class="button" type="submit">Create Category</button>
+  </form>
+</section>
+
+<p><a href="/categories">Back to all categories</a></p>
+
+<%- include('partials/footer') %>

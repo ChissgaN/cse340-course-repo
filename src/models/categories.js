@@ -84,10 +84,53 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
     }
 };
 
+/**
+ * Creates a new category.
+ * @param {string} name - The name of the category.
+ * @returns {number} The id of the newly created category record.
+ */
+const createCategory = async (name) => {
+    const query = `
+        INSERT INTO public.category (name)
+      VALUES ($1)
+      RETURNING category_id;
+    `;
+
+    const queryParams = [name];
+    const result = await db.query(query, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create category');
+    }
+
+    return result.rows[0].category_id;
+};
+
+/**
+ * Updates an existing category.
+ * @param {number} id - The id of the category to update.
+ * @param {string} name - The new name of the category.
+ * @returns {number} How many rows were changed - 0 means no category had that id.
+ */
+const updateCategory = async (id, name) => {
+    const query = `
+        UPDATE public.category
+      SET name = $1
+      WHERE category_id = $2;
+    `;
+
+    const queryParams = [name, id];
+    const result = await db.query(query, queryParams);
+
+    return result.rowCount;
+};
+
 // Export the model functions
 export {
     getAllCategories,
     getCategoryDetails,
     getCategoriesByProjectId,
-    updateCategoryAssignments
+    updateCategoryAssignments,
+    createCategory,
+    updateCategory
 }

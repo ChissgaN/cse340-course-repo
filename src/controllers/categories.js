@@ -1,11 +1,30 @@
 // Import any needed model functions
+import { body, validationResult } from 'express-validator';
 import {
     getAllCategories,
     getCategoryDetails,
     getCategoriesByProjectId,
-    updateCategoryAssignments
+    updateCategoryAssignments,
+    createCategory,
+    updateCategory
 } from '../models/categories.js';
 import { getProjectsByCategoryId, getProjectDetails } from '../models/projects.js';
+
+/**
+ * Server-side validation rules for a category.
+ *
+ * The minimum length is deliberately absent from the form markup, so a short
+ * name reaches the server and this is what rejects it.
+ */
+const categoryValidation = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Category name is required.')
+        .isLength({ min: 3, max: 100 }).withMessage('Category name must be between 3 and 100 characters.')
+];
+
+// PostgreSQL error code for a unique constraint violation.
+const UNIQUE_VIOLATION = '23505';
 
 // Define any controller functions
 const showCategoriesPage = async (req, res) => {
@@ -103,10 +122,116 @@ const processAssignCategoriesForm = async (req, res, next) => {
     res.redirect(`/project/${projectId}`);
 };
 
+const showNewCategoryForm = async (req, res) => {
+    const title = 'Add New Category';
+
+    res.render('new-category', { title, activePage: 'categories' });
+};
+
+const processNewCategoryForm = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect('/new-category');
+    }
+
+    const { name } = req.body ?? {};
+
+    try {
+        await createCategory(name);
+    } catch (error) {
+        // category.name is UNIQUE, so a repeated name is a user mistake rather
+        // than a server fault. Anything else is genuinely unexpected.
+        if (error.code === UNIQUE_VIOLATION) {
+            req.flash('error', 'A category with that name already exists.');
+            return res.redirect('/new-category');
+        }
+        throw error;
+    }
+
+    req.flash('success', 'Category added successfully!');
+
+    res.redirect('/categories');
+};
+
+const showEditCategoryForm = async (req, res, next) => {
+    const categoryId = Number(req.params.id);
+
+    if (!Number.isInteger(categoryId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const category = await getCategoryDetails(categoryId);
+
+    if (category === null) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const title = 'Edit Category';
+
+    res.render('edit-category', { title, activePage: 'categories', category });
+};
+
+const processEditCategoryForm = async (req, res, next) => {
+    const categoryId = Number(req.params.id);
+
+    if (!Number.isInteger(categoryId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect(`/edit-category/${categoryId}`);
+    }
+
+    const { name } = req.body ?? {};
+    let rowsUpdated = 0;
+
+    try {
+        rowsUpdated = await updateCategory(categoryId, name);
+    } catch (error) {
+        if (error.code === UNIQUE_VIOLATION) {
+            req.flash('error', 'A category with that name already exists.');
+            return res.redirect(`/edit-category/${categoryId}`);
+        }
+        throw error;
+    }
+
+    if (rowsUpdated === 0) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    req.flash('success', 'Category updated successfully!');
+
+    res.redirect(`/category/${categoryId}`);
+};
+
 // Export any controller functions
 export {
+    categoryValidation,
     showCategoriesPage,
     showCategoryDetailsPage,
     showAssignCategoriesForm,
-    processAssignCategoriesForm
+    processAssignCategoriesForm,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm
 };
