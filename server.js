@@ -74,10 +74,14 @@ app.use((err, req, res, next) => {
     const status = err.status || 500;
     const template = status === 404 ? '404' : '500';
 
-    // Prepare data for the template
+    // Prepare data for the template.
+    // NODE_ENV is passed explicitly rather than relied on from res.locals: if
+    // the error came from a middleware that runs before the one setting it,
+    // res.locals is still empty and the error page itself would fail to render.
     const context = {
         title: status === 404 ? 'Page Not Found' : 'Server Error',
         activePage: '',
+        NODE_ENV,
         error: err.message,
         stack: err.stack
     };

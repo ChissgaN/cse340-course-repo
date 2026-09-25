@@ -29,7 +29,12 @@
 
   <main id="main">
 
-    <% const messages = flash(); %>
+    <%
+      // flash() is missing when the flash middleware never ran - which is the
+      // case when an earlier middleware threw. The error page must still
+      // render, so fall back to no messages instead of failing here too.
+      const messages = typeof flash === 'function' ? flash() : {};
+    %>
     <% Object.keys(messages).forEach(type => { %>
         <% if (messages[type].length > 0) { %>
             <div class="alert <%= type %>" role="<%= type === 'error' ? 'alert' : 'status' %>">
