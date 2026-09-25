@@ -16,7 +16,12 @@ import {
     showNewProjectForm,
     processNewProjectForm
 } from './controllers/projects.js';
-import { showCategoriesPage, showCategoryDetailsPage } from './controllers/categories.js';
+import {
+    showCategoriesPage,
+    showCategoryDetailsPage,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm
+} from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
 
 const router = express.Router();
@@ -49,6 +54,14 @@ router.post('/new-project', projectValidation, processNewProjectForm);
 
 // Route for service project details page
 router.get('/project/:id', showProjectDetailsPage);
+
+// Routes for assigning categories to a service project.
+// The activity names this URL two different ways, so both are accepted and
+// both reach the same controllers.
+router.get('/assign-categories/:projectId', showAssignCategoriesForm);
+router.post('/assign-categories/:projectId', processAssignCategoriesForm);
+router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
+router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
 
 // Route for category details page
 router.get('/category/:id', showCategoryDetailsPage);

@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Choose the categories that describe <%= project.title %>. Unticking a box removes
+    that category from the project.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/assign-categories/<%= project.project_id %>" method="POST">
+    <fieldset class="checkbox-group">
+      <legend>Categories</legend>
+
+      <% categories.forEach((category) => { %>
+        <div class="checkbox-row">
+          <input
+            type="checkbox"
+            id="category-<%= category.category_id %>"
+            name="categoryIds"
+            value="<%= category.category_id %>"
+            <%= assignedCategoryIds.includes(category.category_id) ? 'checked' : '' %>
+          />
+          <label for="category-<%= category.category_id %>"><%= category.name %></label>
+        </div>
+      <% }) %>
+    </fieldset>
+
+    <button class="button" type="submit">Save Categories</button>
+  </form>
+</section>
+
+<p><a href="/project/<%= project.project_id %>">Cancel and go back</a></p>
+
+<%- include('partials/footer') %>

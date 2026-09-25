@@ -86,7 +86,7 @@ const processNewProjectForm = async (req, res) => {
         return res.redirect('/new-project');
     }
 
-    const { title, description, location, date, organizationId } = req.body;
+    const { title, description, location, date, organizationId } = req.body ?? {};
 
     await createProject(title, description, location, date, organizationId);
 

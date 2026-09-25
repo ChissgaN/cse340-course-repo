@@ -50,5 +50,44 @@ const getCategoriesByProjectId = async (projectId) => {
     return result.rows;
 };
 
+/**
+ * Links one category to one project in the junction table.
+ * Not exported: only updateCategoryAssignments below uses it.
+ */
+const assignCategoryToProject = async (projectId, categoryId) => {
+    const query = `
+        INSERT INTO public.project_category (project_id, category_id)
+      VALUES ($1, $2);
+    `;
+
+    const queryParams = [projectId, categoryId];
+    await db.query(query, queryParams);
+};
+
+/**
+ * Replaces a project's categories with the given list.
+ *
+ * Delete-then-insert rather than working out which links to add and which to
+ * remove: the set is tiny, and this cannot leave a stale row behind. An empty
+ * array is meaningful - it clears every category from the project.
+ */
+const updateCategoryAssignments = async (projectId, categoryIds) => {
+    const deleteQuery = `
+        DELETE FROM public.project_category
+      WHERE project_id = $1;
+    `;
+
+    await db.query(deleteQuery, [projectId]);
+
+    for (const categoryId of categoryIds) {
+        await assignCategoryToProject(projectId, categoryId);
+    }
+};
+
 // Export the model functions
-export { getAllCategories, getCategoryDetails, getCategoriesByProjectId }
+export {
+    getAllCategories,
+    getCategoryDetails,
+    getCategoriesByProjectId,
+    updateCategoryAssignments
+}

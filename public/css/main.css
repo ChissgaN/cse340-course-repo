@@ -372,6 +372,43 @@ a.tag:hover {
   border-color: var(--teal);
 }
 
+.checkbox-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0 0 1.1rem;
+}
+
+.checkbox-group legend {
+  font-weight: 600;
+  color: var(--navy);
+  padding: 0 0.4rem;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.25rem 0;
+}
+
+.checkbox-row input {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+}
+
+.checkbox-row label {
+  margin: 0;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.checkbox-row input:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
 .form button {
   border: none;
   cursor: pointer;

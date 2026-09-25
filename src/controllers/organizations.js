@@ -53,7 +53,7 @@ const showNewOrganizationForm = async (req, res) => {
 };
 
 const processNewOrganizationForm = async (req, res) => {
-    const { name, description, contactEmail } = req.body;
+    const { name, description, contactEmail } = req.body ?? {};
     const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations
 
     const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
@@ -99,7 +99,7 @@ const processEditOrganizationForm = async (req, res, next) => {
         return next(err);
     }
 
-    const { name, description, contactEmail, logoFilename } = req.body;
+    const { name, description, contactEmail, logoFilename } = req.body ?? {};
 
     const rowsUpdated = await updateOrganization(
         organizationId,
