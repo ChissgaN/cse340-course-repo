@@ -1,5 +1,10 @@
 // Import any needed model functions
-import { getAllOrganizations, getOrganizationDetails, createOrganization } from '../models/organizations.js';
+import {
+    getAllOrganizations,
+    getOrganizationDetails,
+    createOrganization,
+    updateOrganization
+} from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 
 // Define any controller functions
@@ -59,10 +64,70 @@ const processNewOrganizationForm = async (req, res) => {
     res.redirect(`/organization/${organizationId}`);
 };
 
+const showEditOrganizationForm = async (req, res, next) => {
+    const organizationId = Number(req.params.id);
+
+    if (!Number.isInteger(organizationId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const organizationDetails = await getOrganizationDetails(organizationId);
+
+    if (organizationDetails === null) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const title = 'Edit Organization';
+
+    res.render('edit-organization', {
+        title,
+        activePage: 'organizations',
+        organizationDetails
+    });
+};
+
+const processEditOrganizationForm = async (req, res, next) => {
+    const organizationId = Number(req.params.id);
+
+    if (!Number.isInteger(organizationId)) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    const { name, description, contactEmail, logoFilename } = req.body;
+
+    const rowsUpdated = await updateOrganization(
+        organizationId,
+        name,
+        description,
+        contactEmail,
+        logoFilename
+    );
+
+    // rowCount of 0 means no organization carries that id, so there was
+    // nothing to edit - the same 404 the details page would give.
+    if (rowsUpdated === 0) {
+        const err = new Error('Page Not Found');
+        err.status = 404;
+        return next(err);
+    }
+
+    req.flash('success', 'Organization updated successfully!');
+
+    res.redirect(`/organization/${organizationId}`);
+};
+
 // Export any controller functions
 export {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
-    processNewOrganizationForm
+    processNewOrganizationForm,
+    showEditOrganizationForm,
+    processEditOrganizationForm
 };

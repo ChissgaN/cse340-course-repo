@@ -1,0 +1,57 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Update the details for <%= organizationDetails.name %>.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/edit-organization/<%= organizationDetails.organization_id %>" method="POST">
+    <div class="form-group">
+      <label for="name">Organization Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= organizationDetails.name %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="5"
+      ><%= organizationDetails.description %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="contactEmail">Contact Email</label>
+      <input
+        type="text"
+        id="contactEmail"
+        name="contactEmail"
+        value="<%= organizationDetails.contact_email %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="logoFilename">Logo Filename</label>
+      <input
+        type="text"
+        id="logoFilename"
+        name="logoFilename"
+        value="<%= organizationDetails.logo_filename %>"
+      />
+    </div>
+
+    <button class="button" type="submit">Update Organization</button>
+  </form>
+</section>
+
+<p><a href="/organization/<%= organizationDetails.organization_id %>">Cancel and go back</a></p>
+
+<%- include('partials/footer') %>
