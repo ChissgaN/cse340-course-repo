@@ -290,6 +290,46 @@ a.tag:hover {
   margin-bottom: 0.5rem;
 }
 
+/* --- Flash messages ------------------------------------------ */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert p + p {
+    margin-top: 0.4rem;
+}
+
+.alert.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert.warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
 /* --- Forms --------------------------------------------------- */
 .form {
   max-width: 40rem;
