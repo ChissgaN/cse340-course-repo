@@ -1,10 +1,34 @@
 // Import any needed model functions
+import { body, validationResult } from 'express-validator';
 import {
     getAllOrganizations,
     getOrganizationDetails,
     createOrganization,
     updateOrganization
 } from '../models/organizations.js';
+
+/**
+ * Server-side validation rules for an organization.
+ *
+ * The same rules apply whether an organization is being created or edited, so
+ * both routes share this array. The maximum lengths match the column widths in
+ * setup.sql, so a value that passes here always fits in the database.
+ */
+const organizationValidation = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Organization name is required.')
+        .isLength({ min: 3, max: 150 }).withMessage('Organization name must be between 3 and 150 characters.'),
+    body('description')
+        .trim()
+        .notEmpty().withMessage('Description is required.')
+        .isLength({ max: 1000 }).withMessage('Description must be less than 1000 characters.'),
+    body('contactEmail')
+        .trim()
+        .notEmpty().withMessage('Contact email is required.')
+        .isEmail().withMessage('Contact email must be a valid email address.')
+        .isLength({ max: 255 }).withMessage('Contact email must be less than 255 characters.')
+];
 import { getProjectsByOrganizationId } from '../models/projects.js';
 
 // Define any controller functions
@@ -53,6 +77,16 @@ const showNewOrganizationForm = async (req, res) => {
 };
 
 const processNewOrganizationForm = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect('/new-organization');
+    }
+
     const { name, description, contactEmail } = req.body ?? {};
     const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations
 
@@ -99,6 +133,16 @@ const processEditOrganizationForm = async (req, res, next) => {
         return next(err);
     }
 
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect(`/edit-organization/${organizationId}`);
+    }
+
     const { name, description, contactEmail, logoFilename } = req.body ?? {};
 
     const rowsUpdated = await updateOrganization(
@@ -124,6 +168,7 @@ const processEditOrganizationForm = async (req, res, next) => {
 
 // Export any controller functions
 export {
+    organizationValidation,
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,

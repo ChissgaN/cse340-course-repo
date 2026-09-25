@@ -15,6 +15,9 @@
         type="text"
         id="name"
         name="name"
+        minlength="3"
+        maxlength="150"
+        required
         value="<%= organizationDetails.name %>"
       />
     </div>
@@ -25,15 +28,19 @@
         id="description"
         name="description"
         rows="5"
+        maxlength="1000"
+        required
       ><%= organizationDetails.description %></textarea>
     </div>
 
     <div class="form-group">
       <label for="contactEmail">Contact Email</label>
       <input
-        type="text"
+        type="email"
         id="contactEmail"
         name="contactEmail"
+        maxlength="255"
+        required
         value="<%= organizationDetails.contact_email %>"
       />
     </div>
@@ -44,6 +51,8 @@
         type="text"
         id="logoFilename"
         name="logoFilename"
+        maxlength="255"
+        required
         value="<%= organizationDetails.logo_filename %>"
       />
     </div>
