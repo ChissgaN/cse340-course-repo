@@ -22,7 +22,12 @@
           <li><a href="/organizations" class="<%= activePage === 'organizations' ? 'active' : '' %>">Organizations</a></li>
           <li><a href="/projects" class="<%= activePage === 'projects' ? 'active' : '' %>">Service Projects</a></li>
           <li><a href="/categories" class="<%= activePage === 'categories' ? 'active' : '' %>">Categories</a></li>
-          <li><a href="/register" class="<%= activePage === 'register' ? 'active' : '' %>">Register</a></li>
+          <% if (isLoggedIn) { %>
+            <li><a href="/logout">Sign Out</a></li>
+          <% } else { %>
+            <li><a href="/register" class="<%= activePage === 'register' ? 'active' : '' %>">Register</a></li>
+            <li><a href="/login" class="<%= activePage === 'login' ? 'active' : '' %>">Sign In</a></li>
+          <% } %>
         </ul>
       </nav>
     </div>

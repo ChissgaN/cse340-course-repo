@@ -47,8 +47,13 @@ app.use((req, res, next) => {
     next(); // Pass control to the next middleware or route
 });
 
-// Middleware to make NODE_ENV available to all templates
+// Middleware to make NODE_ENV and the login state available to all templates
 app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
+
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
@@ -82,6 +87,7 @@ app.use((err, req, res, next) => {
         title: status === 404 ? 'Page Not Found' : 'Server Error',
         activePage: '',
         NODE_ENV,
+        isLoggedIn: Boolean(req.session?.user),
         error: err.message,
         stack: err.stack
     };

@@ -1,7 +1,7 @@
 // Import any needed model functions
 import bcrypt from 'bcrypt';
 import { body, validationResult } from 'express-validator';
-import { createUser } from '../models/users.js';
+import { createUser, authenticateUser } from '../models/users.js';
 
 /**
  * How many times bcrypt runs its hashing algorithm. Higher is slower to
@@ -76,5 +76,55 @@ const processUserRegistrationForm = async (req, res) => {
     res.redirect('/');
 };
 
+const showLoginForm = async (req, res) => {
+    const title = 'Sign In';
+
+    res.render('login', { title, activePage: 'login' });
+};
+
+const processLoginForm = async (req, res) => {
+    const { email, password } = req.body ?? {};
+
+    const user = await authenticateUser(email, password);
+
+    if (user === null) {
+        // One message for both causes. Saying "no such email" would confirm
+        // which addresses have accounts.
+        req.flash('error', 'Invalid email or password.');
+        return res.redirect('/login');
+    }
+
+    req.session.user = user;
+
+    if (process.env.NODE_ENV?.toLowerCase() === 'development') {
+        console.log('User logged in:', user);
+    }
+
+    req.flash('success', `Welcome back, ${user.name}!`);
+
+    res.redirect('/');
+};
+
+const processLogout = async (req, res) => {
+    // The message has to be written to the NEW session: destroying the old one
+    // takes its flash storage with it, so a message stored beforehand would
+    // never be read.
+    req.session.regenerate((err) => {
+        if (err) {
+            return res.redirect('/login');
+        }
+
+        req.flash('success', 'You have been logged out.');
+        res.redirect('/login');
+    });
+};
+
 // Export any controller functions
-export { registrationValidation, showUserRegistrationForm, processUserRegistrationForm };
+export {
+    registrationValidation,
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout
+};

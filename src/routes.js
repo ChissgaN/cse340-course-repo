@@ -3,7 +3,10 @@ import express from 'express';
 import {
     registrationValidation,
     showUserRegistrationForm,
-    processUserRegistrationForm
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout
 } from './controllers/users.js';
 
 import { showHomePage } from './controllers/index.js';
@@ -103,6 +106,11 @@ router.get('/register', showUserRegistrationForm);
 
 // Route to handle user registration form submission
 router.post('/register', registrationValidation, processUserRegistrationForm);
+
+// Routes for signing in and out
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);
