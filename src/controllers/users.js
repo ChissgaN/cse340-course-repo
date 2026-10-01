@@ -102,7 +102,30 @@ const processLoginForm = async (req, res) => {
 
     req.flash('success', `Welcome back, ${user.name}!`);
 
-    res.redirect('/');
+    res.redirect('/dashboard');
+};
+
+/**
+ * Blocks a request when nobody is signed in.
+ *
+ * This is the enforcement the hidden navigation links do not provide: a link
+ * that is not rendered can still be typed into the address bar, so the check
+ * has to happen on the server.
+ */
+const requireLogin = (req, res, next) => {
+    if (!req.session.user) {
+        req.flash('error', 'Please sign in to view that page.');
+        return res.redirect('/login');
+    }
+
+    next();
+};
+
+const showDashboard = async (req, res) => {
+    const { name, email } = req.session.user;
+    const title = 'Dashboard';
+
+    res.render('dashboard', { title, activePage: 'dashboard', name, email });
 };
 
 const processLogout = async (req, res) => {
@@ -126,5 +149,7 @@ export {
     processUserRegistrationForm,
     showLoginForm,
     processLoginForm,
-    processLogout
+    processLogout,
+    requireLogin,
+    showDashboard
 };

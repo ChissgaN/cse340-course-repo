@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    This page is only reachable while you are signed in.
+  </p>
+</section>
+
+<section class="section">
+  <article class="card">
+    <h2>Your account</h2>
+
+    <dl class="project-facts">
+      <dt>Name</dt>
+      <dd><%= name %></dd>
+
+      <dt>Email</dt>
+      <dd><%= email %></dd>
+    </dl>
+  </article>
+</section>
+
+<p><a href="/">Back to the home page</a></p>
+
+<%- include('partials/footer') %>
