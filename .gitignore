@@ -108,3 +108,8 @@ $RECYCLE.BIN/
 # --- Herramientas de IA / notas locales -------------------------
 .claude/
 CLAUDE.md
+
+# --- Volcados de datos locales ----------------------------------
+# Copias de seguridad de la base. Utiles en local, pero son fotos de
+# un momento concreto: setup.sql es lo que reconstruye la base.
+backup-*.sql
