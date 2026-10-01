@@ -9,7 +9,8 @@ import {
     processLogout,
     requireLogin,
     requireRole,
-    showDashboard
+    showDashboard,
+    showUsersPage
 } from './controllers/users.js';
 
 import { showHomePage } from './controllers/index.js';
@@ -117,6 +118,11 @@ router.get('/logout', processLogout);
 
 // Protected dashboard route
 router.get('/dashboard', requireLogin, showDashboard);
+
+// Admin-only list of registered users. requireLogin sends a signed-out
+// visitor to the sign-in page; requireRole sends a signed-in non-admin back
+// to the dashboard they came from.
+router.get('/users', requireLogin, requireRole('admin', '/dashboard'), showUsersPage);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);

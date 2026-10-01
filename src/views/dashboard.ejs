@@ -18,6 +18,10 @@
       <dt>Email</dt>
       <dd><%= email %></dd>
     </dl>
+
+    <% if (user && user.role_name === 'admin') { %>
+      <p><a href="/users">View all registered users</a></p>
+    <% } %>
   </article>
 </section>
 

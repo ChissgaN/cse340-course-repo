@@ -290,6 +290,47 @@ a.tag:hover {
   margin-bottom: 0.5rem;
 }
 
+/* --- Data tables --------------------------------------------- */
+/* The wrapper scrolls instead of the page when the table is too wide. */
+.table-wrap {
+  overflow-x: auto;
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table caption {
+  padding: 0.9rem 1rem 0;
+  text-align: left;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table thead th {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 /* --- Flash messages ------------------------------------------ */
 .alert {
     padding: 15px;

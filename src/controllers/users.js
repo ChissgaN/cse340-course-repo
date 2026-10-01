@@ -1,7 +1,7 @@
 // Import any needed model functions
 import bcrypt from 'bcrypt';
 import { body, validationResult } from 'express-validator';
-import { createUser, authenticateUser } from '../models/users.js';
+import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
 
 /**
  * How many times bcrypt runs its hashing algorithm. Higher is slower to
@@ -131,15 +131,19 @@ const requireLogin = (req, res, next) => {
  * This is a factory: it takes the role and returns the middleware. A plain
  * middleware function can only receive (req, res, next), so there would be
  * nowhere to say which role a route needs - the outer call is what captures it.
+ *
+ * @param {string} role - The role the route requires.
+ * @param {string} redirectTo - Where to send someone who lacks it. Pages
+ *   reached from the dashboard send them back there; the rest go home.
  */
-const requireRole = (role) => {
+const requireRole = (role, redirectTo = '/') => {
     return (req, res, next) => {
         if (req.session.user && req.session.user.role_name === role) {
             return next();
         }
 
         req.flash('error', 'You do not have permission to view that page.');
-        res.redirect('/');
+        res.redirect(redirectTo);
     };
 };
 
@@ -148,6 +152,13 @@ const showDashboard = async (req, res) => {
     const title = 'Dashboard';
 
     res.render('dashboard', { title, activePage: 'dashboard', name, email });
+};
+
+const showUsersPage = async (req, res) => {
+    const users = await getAllUsers();
+    const title = 'Registered Users';
+
+    res.render('users', { title, activePage: 'dashboard', users });
 };
 
 const processLogout = async (req, res) => {
@@ -174,5 +185,6 @@ export {
     processLogout,
     requireLogin,
     requireRole,
-    showDashboard
+    showDashboard,
+    showUsersPage
 };

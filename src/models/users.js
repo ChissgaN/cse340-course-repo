@@ -94,5 +94,24 @@ const authenticateUser = async (email, password) => {
     return userWithoutHash;
 };
 
+/**
+ * Gets every registered user with the name of their role.
+ *
+ * The password hash is deliberately not selected: nothing outside
+ * authenticateUser has any reason to see it.
+ */
+const getAllUsers = async () => {
+    const query = `
+        SELECT u.user_id, u.name, u.email, u.created_at, r.role_name
+      FROM public.users u
+      JOIN public.roles r ON r.role_id = u.role_id
+      ORDER BY u.name;
+    `;
+
+    const result = await db.query(query);
+
+    return result.rows;
+};
+
 // Export the model functions
-export { createUser, authenticateUser }
+export { createUser, authenticateUser, getAllUsers }
