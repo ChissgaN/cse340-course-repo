@@ -214,3 +214,55 @@ FROM category c
 LEFT JOIN project_category pc ON pc.category_id = c.category_id
 GROUP BY c.category_id, c.name
 ORDER BY c.name;
+
+
+-- ========================================
+-- Roles Table
+-- ========================================
+--
+-- Role-based access control: a role is assigned to many users, and each
+-- user has exactly one role. Permissions are decided in application code
+-- rather than stored here.
+
+CREATE TABLE roles (
+    role_id          SERIAL PRIMARY KEY,
+    role_name        VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
+);
+
+
+-- ========================================
+-- Insert sample data: Roles
+-- ========================================
+
+INSERT INTO roles (role_name, role_description)
+VALUES
+('user', 'Standard user with basic access'),
+('admin', 'Administrator with full system access');
+
+
+-- ========================================
+-- Users Table
+-- ========================================
+--
+-- email is the username, so it is UNIQUE. Only the password hash is
+-- stored - never the password itself.
+
+CREATE TABLE users (
+    user_id       SERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id       INTEGER REFERENCES roles(role_id),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- ========================================
+-- Verify Roles and Users
+-- ========================================
+
+SELECT u.user_id, u.name, u.email, r.role_name
+FROM users u
+JOIN roles r ON r.role_id = u.role_id
+ORDER BY u.user_id;
