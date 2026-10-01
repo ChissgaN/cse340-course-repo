@@ -31,13 +31,19 @@ const createUser = async (name, email, passwordHash) => {
 
 /**
  * Finds one user by email, including the password hash.
+ *
+ * Joins roles so the caller gets role_name rather than role_id: the session
+ * then carries a name the templates and middleware can compare directly,
+ * without a second lookup on every request.
+ *
  * Not exported: only authenticateUser below needs the hash.
  */
 const findUserByEmail = async (email) => {
     const query = `
-        SELECT user_id, name, email, password_hash, role_id
-      FROM public.users
-      WHERE email = $1;
+        SELECT u.user_id, u.name, u.email, u.password_hash, r.role_name
+      FROM public.users u
+      JOIN public.roles r ON r.role_id = u.role_id
+      WHERE u.email = $1;
     `;
 
     const queryParams = [email];

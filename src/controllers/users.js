@@ -32,7 +32,11 @@ const registrationValidation = [
         .isLength({ max: 100 }).withMessage('Email must be less than 100 characters.'),
     body('password')
         .notEmpty().withMessage('Password is required.')
-        .isLength({ min: 8 }).withMessage('Password must be at least 8 characters.')
+        // Six, not the eight you would normally want: the course requires a
+        // grading account whose password is 'cse340!', which is seven
+        // characters, and it has to be registered through this form so the
+        // password is hashed the same way as everyone else's.
+        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters.')
 ];
 
 // Define any controller functions
@@ -121,6 +125,24 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
+/**
+ * Builds middleware that blocks anyone who does not hold the given role.
+ *
+ * This is a factory: it takes the role and returns the middleware. A plain
+ * middleware function can only receive (req, res, next), so there would be
+ * nowhere to say which role a route needs - the outer call is what captures it.
+ */
+const requireRole = (role) => {
+    return (req, res, next) => {
+        if (req.session.user && req.session.user.role_name === role) {
+            return next();
+        }
+
+        req.flash('error', 'You do not have permission to view that page.');
+        res.redirect('/');
+    };
+};
+
 const showDashboard = async (req, res) => {
     const { name, email } = req.session.user;
     const title = 'Dashboard';
@@ -151,5 +173,6 @@ export {
     processLoginForm,
     processLogout,
     requireLogin,
+    requireRole,
     showDashboard
 };

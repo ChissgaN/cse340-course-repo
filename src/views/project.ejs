@@ -45,11 +45,13 @@
       </dd>
     </dl>
 
-    <p>
-      <a href="/edit-project/<%= project.project_id %>">Edit this project</a>
-      &middot;
-      <a href="/assign-categories/<%= project.project_id %>">Edit Categories</a>
-    </p>
+    <% if (user && user.role_name === 'admin') { %>
+      <p>
+        <a href="/edit-project/<%= project.project_id %>">Edit this project</a>
+        &middot;
+        <a href="/assign-categories/<%= project.project_id %>">Edit Categories</a>
+      </p>
+    <% } %>
   </article>
 </section>
 
