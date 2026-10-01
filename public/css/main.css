@@ -364,6 +364,12 @@ a.tag:hover {
   resize: vertical;
 }
 
+.field-hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
 .form-group input:focus-visible,
 .form-group select:focus-visible,
 .form-group textarea:focus-visible {

@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+<section class="page-intro">
+  <h1><%= title %></h1>
+  <p class="lead">
+    Create an account to keep track of the service projects you join.
+  </p>
+</section>
+
+<section class="section">
+  <form class="card form" action="/register" method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        maxlength="100"
+        autocomplete="name"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        maxlength="100"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      />
+      <p class="field-hint">At least 8 characters.</p>
+    </div>
+
+    <button class="button" type="submit">Create Account</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
